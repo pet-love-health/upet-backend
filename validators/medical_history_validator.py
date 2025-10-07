@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.medicalHistory import MedicalHistory
+from medicalhistory.domain.models.medicalHistory import MedicalHistory
 
 class MedicalHistoryValidator:
 

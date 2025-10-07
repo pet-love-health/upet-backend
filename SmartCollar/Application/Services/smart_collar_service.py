@@ -4,7 +4,7 @@ from sqlalchemy.exc import NoResultFound
 from SmartCollar.Domain.Models.smart_colllar_model import SmartCollar
 from SmartCollar.Application.Schema.smart_collar_schema import SmartCollarRequest, SmartCollarResponse, SmartCollarUpdateRequest
 from SmartCollar.Domain.ValueObject.location_type import LocationType
-from models.pet import Pet
+from pets.domain.models.pet import Pet
 
 class SmartCollarService:
     def __init__(self, db: Session):

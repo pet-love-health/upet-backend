@@ -1,8 +1,8 @@
 import os
 import uvicorn
 from config.db import SessionLocal, create_all_tables
-from models.availability import Availability
-from schedulare.appointment_schedulare import AppointmentScheduler
+from appointments.domain.models.availability import Availability
+from appointments.application.internal.appointment_schedulare import AppointmentScheduler
 from scheduler import check_and_reset_availabilities, sending_notifys
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger

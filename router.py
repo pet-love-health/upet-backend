@@ -1,23 +1,23 @@
 from fastapi import APIRouter
 
-from routes.user import users as user_router
-from routes.veterinaryClinic import veterinary_clinics as veterinary_clinic_router
-from routes.pet import pets as pet_router
-from routes.appointment import appointments as appointment_router
-from routes.notification import notifications as notification_router
-from routes.medicalHistory import medical_histories as medical_history_router
-from routes.petOwner import pet_owners as pet_owner_router
-from routes.veterinarian import veterinarians as veterinarian_router
-from routes.disease import diseases as disease_router
-from routes.vaccination import vaccinations as vaccine_router
-from routes.review import reviews as review_router
-from routes.availability import availabilities as availability_router
-from auth.routes.auth import auth as auth_router
-from routes.pdfReport import pdf_router as pdf_router
-from routes.favorite_clinics import favorite_clinics as favorite_clinics_router
+from auth.interfaces.rest.user import users as user_router
+from veterinaryclinics.interfaces.rest.veterinaryClinic import veterinary_clinics as veterinary_clinic_router
+from pets.interfaces.rest.pet import pets as pet_router
+from appointments.interfaces.rest.appointment import appointments as appointment_router
+from notifications.interfaces.rest.notification import notifications as notification_router
+from medicalhistory.interfaces.rest.medicalHistory import medical_histories as medical_history_router
+from petowners.interfaces.rest.petOwner import pet_owners as pet_owner_router
+from veterinarian.interfaces.rest.veterinarian import veterinarians as veterinarian_router
+from medicalhistory.interfaces.rest.disease import diseases as disease_router
+from medicalhistory.interfaces.rest.vaccination import vaccinations as vaccine_router
+from reviews.interfaces.rest.review import reviews as review_router
+from appointments.interfaces.rest.availability import availabilities as availability_router
+from auth.interfaces.rest.auth import auth as auth_router
+from medicalhistory.interfaces.rest.pdfReport import pdf_router as pdf_router
+from petowners.interfaces.rest.favorite_clinics import favorite_clinics as favorite_clinics_router
 from config.routes import prefix
 from SmartCollar.Application.routes.smart_collar_route import smart_collar
-from routes.reminder import reminders as reminder_router
+from notifications.interfaces.rest.reminder import reminders as reminder_router
 routes = APIRouter()
 
 # Include all the routes

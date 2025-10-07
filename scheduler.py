@@ -5,13 +5,13 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 import uvicorn
 from config.db import get_db
-from models.availability import Availability
-from models.notification import Notification
-from models.petOwner import PetOwner
-from schedulare.appointment_schedulare import AppointmentScheduler
-from services.availability import AvailabilityService
+from appointments.domain.models.availability import Availability
+from notifications.domain.models.notification import Notification
+from petowners.domain.models.petOwner import PetOwner
+from appointments.application.internal.appointment_schedulare import AppointmentScheduler
+from appointments.domain.services.availability import AvailabilityService
 from config.db import SessionLocal
-from services.availability import AvailabilityService
+from appointments.domain.services.availability import AvailabilityService
 
 
 def check_and_reset_availabilities(db: Session):

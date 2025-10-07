@@ -2,7 +2,7 @@ from datetime import date, time
 from typing import Optional
 from pydantic import BaseModel
 from SmartCollar.Domain.ValueObject.location_type import LocationType
-from models.availability import Availability
+from appointments.domain.models.availability import Availability
 
 class SmartCollarRequest(BaseModel):
     serial_number: str
