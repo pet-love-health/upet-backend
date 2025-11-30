@@ -29,7 +29,7 @@ class SmartCollarService:
         return collar_responses
 
 
-    def add_smart_collar(self, collar_data: SmartCollarRequest) -> SmartCollarResponse:
+    def add_smart_collar(self, collar_data: SmartCollarRequest, db: Session) -> SmartCollarResponse:
         try:
             location = LocationType(latitude=collar_data.location.latitude, longitude=collar_data.location.longitude)
 
@@ -61,7 +61,7 @@ class SmartCollarService:
             self.db.rollback()  # Rollback the transaction
             raise ValueError(f"Duplicate serial number: {collar_data.serial_number}. The collar already exists.") from e
 
-    def delete_smart_collar(self, collar_id: int) -> bool:
+    def delete_smart_collar(self, collar_id: int,, db: Session) -> bool:
         collar_to_delete = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
         if collar_to_delete:
             self.db.delete(collar_to_delete)
@@ -69,7 +69,7 @@ class SmartCollarService:
             return True
         return False
 
-    def update_smart_collar(self, collar_id: int, collar_data: SmartCollarUpdateRequest) -> SmartCollarResponse:
+    def update_smart_collar(self, collar_id: int, collar_data: SmartCollarUpdateRequest, db: Session) -> SmartCollarResponse:
             try:
                 # Buscar el collar en la base de datos
                 collar = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
@@ -105,7 +105,7 @@ class SmartCollarService:
             except NoResultFound:
                 raise ValueError(f"No collar found with ID {collar_id}")
             
-    def get_by_id(self, collar_id: int):
+    def get_by_id(self, collar_id: int, db: Session):
             try:
                 # Buscar el collar por ID
                 collar = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
@@ -129,7 +129,7 @@ class SmartCollarService:
             except NoResultFound:
                 raise ValueError(f"No collar found with IDs {collar_id}")
             
-    def get_by_pet_id(self, pet_id: int):
+    def get_by_pet_id(self, pet_id: int, db: Session):
             # Buscar los collares asociados al pet_id
             collars = self.db.query(SmartCollar).filter(SmartCollar.pet_id == pet_id).all()
 
@@ -153,7 +153,7 @@ class SmartCollarService:
 
             return collar_responses
 
-    def change_pet_association(self, collar_id: int, new_pet_id: int) -> SmartCollarResponse:
+    def change_pet_association(self, collar_id: int, new_pet_id: int, db: Session) -> SmartCollarResponse:
         try:
             # Buscar el collar en la base de datos
             collar = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
@@ -181,7 +181,7 @@ class SmartCollarService:
         except NoResultFound:
             raise ValueError(f"No collar found with ID {collar_id}")
         
-    def disassociate_smart_collar(self, collar_id: int) -> SmartCollarResponse:
+    def disassociate_smart_collar(self, collar_id: int, db: Session) -> SmartCollarResponse:
         try:
             # Buscar el collar en la base de datos
             collar = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
