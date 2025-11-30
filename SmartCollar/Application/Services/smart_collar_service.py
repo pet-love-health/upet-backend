@@ -10,7 +10,7 @@ class SmartCollarService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_all_smart_collars(self) -> list[SmartCollarResponse]:
+    def get_all_smart_collars(self, db: Session) -> list[SmartCollarResponse]:
         collars = self.db.query(SmartCollar).all()
 
         collar_responses = []
@@ -61,7 +61,7 @@ class SmartCollarService:
             self.db.rollback()  # Rollback the transaction
             raise ValueError(f"Duplicate serial number: {collar_data.serial_number}. The collar already exists.") from e
 
-    def delete_smart_collar(self, collar_id: int,, db: Session) -> bool:
+    def delete_smart_collar(self, collar_id: int, db: Session) -> bool:
         collar_to_delete = self.db.query(SmartCollar).filter(SmartCollar.id == collar_id).first()
         if collar_to_delete:
             self.db.delete(collar_to_delete)
