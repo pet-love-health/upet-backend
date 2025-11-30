@@ -11,7 +11,9 @@ from pets.domain.models.pet import Pet
 from medicalhistory.interfaces.rest.resources.medicalHistory import MedicalHistorySchemaPost
 from pets.interfaces.rest.resources.pet import PetSchemaPost, PetSchemaResponse
 from medicalhistory.domain.services.medical_history import MedicalHistoryService
-
+from SmartCollar.Application.Schema.smart_collar_schema import SmartCollarRequest
+from SmartCollar.Application.Services.smart_collar_service import SmartCollarService
+from SmartCollar.Domain.ValueObject.location_type import LocationType
 class PetServices:
     @staticmethod
     def create_new_pet(petowner_id: int, pet: PetSchemaPost, db: Session ):
@@ -34,7 +36,23 @@ class PetServices:
         db.add(new_pet)
         db.commit()
         db.refresh(new_pet)  # Para cargar el ID generado
-
+        
+        ser = "upet-"
+        if(new_pet.id < 100):
+            ser += "0"
+        if(new_pet.id < 10):
+            ser += "0"
+        ser += new_pet.id
+        
+        smartCollar = SmartCollarRequest(
+            serial_number=ser,
+            temperature = 0.0,
+            lpm = 0.0,
+            battery = 100.0,
+            location = LocationType(latitude=0.0, longitude=0.0)
+        )
+        SmartCollarService.add_smart_collar(smartCollar)
+        SmartCollarService.change_pet_association(new_pet.id,new_pet.id)
 
         medicalHistory = MedicalHistorySchemaPost(
             petId=new_pet.id,
