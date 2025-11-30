@@ -42,7 +42,7 @@ class PetServices:
             ser += "0"
         if(new_pet.id < 10):
             ser += "0"
-        ser += int(new_pet.id)
+        ser += str(new_pet.id)
         
         smartCollar = SmartCollarRequest(
             serial_number=ser,
