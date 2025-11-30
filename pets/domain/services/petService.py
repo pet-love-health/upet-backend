@@ -51,8 +51,8 @@ class PetServices:
             battery = 100.0,
             location = LocationType(latitude=0.0, longitude=0.0)
         )
-        SmartCollarService.add_smart_collar(smartCollar)
-        SmartCollarService.change_pet_association(new_pet.id,new_pet.id)
+        SmartCollarService.add_smart_collar(smartCollar,db=db)
+        SmartCollarService.change_pet_association(new_pet.id,new_pet.id,db=db)
 
         medicalHistory = MedicalHistorySchemaPost(
             petId=new_pet.id,
