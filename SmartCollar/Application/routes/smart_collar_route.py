@@ -14,17 +14,17 @@ endpoint = "/smart-collars"
 @smart_collar.get(endpoint, response_model=list[SmartCollarResponse], status_code=status.HTTP_200_OK, tags=[tag])
 def get_all_smart_collars(db: Session = Depends(get_db)):
     service = SmartCollarService(db)
-    return service.get_all_smart_collars()
+    return service.get_all_smart_collars(db)
 
 @smart_collar.post("/add_smart_collar", response_model=SmartCollarResponse)
 def add_smart_collar(collar_data: SmartCollarRequest, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
-    return service.add_smart_collar(collar_data)
+    return service.add_smart_collar(collar_data,db)
 
 @smart_collar.delete("/delete_smart_collar/{collar_id}")
 def delete_smart_collar(collar_id: int, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
-    success = service.delete_smart_collar(collar_id)
+    success = service.delete_smart_collar(collar_id,db)
     if not success:
         raise HTTPException(status_code=404, detail="Collar not found")
     return {"message": "Smart collar deleted successfully"}
@@ -33,7 +33,7 @@ def delete_smart_collar(collar_id: int, db: Session = Depends(get_db)):
 def change_pet_association(collar_id: int, new_pet_id: int, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
     try:
-        return service.change_pet_association(collar_id, new_pet_id)
+        return service.change_pet_association(collar_id, new_pet_id,db)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
     
@@ -41,7 +41,7 @@ def change_pet_association(collar_id: int, new_pet_id: int, db: Session = Depend
 def update_smart_collar(collar_id: int, collar_data: SmartCollarUpdateRequest, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
     try:
-        updated_collar = service.update_smart_collar(collar_id, collar_data)
+        updated_collar = service.update_smart_collar(collar_id, collar_data,db)
         return updated_collar
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -50,7 +50,7 @@ def update_smart_collar(collar_id: int, collar_data: SmartCollarUpdateRequest, d
 def get_smart_collar_by_id(collar_id: int, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
     try:
-        return service.get_by_id(collar_id)
+        return service.get_by_id(collar_id,db)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
@@ -58,7 +58,7 @@ def get_smart_collar_by_id(collar_id: int, db: Session = Depends(get_db)):
 def get_smart_collars_by_pet_id(pet_id: int, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
     try:
-        return service.get_by_pet_id(pet_id)
+        return service.get_by_pet_id(pet_id,db)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
@@ -66,7 +66,7 @@ def get_smart_collars_by_pet_id(pet_id: int, db: Session = Depends(get_db)):
 def dessociate_pet(collar_id: int, db: Session = Depends(get_db)):
     service = SmartCollarService(db)
     try:
-        return service.disassociate_smart_collar(collar_id)
+        return service.disassociate_smart_collar(collar_id,db)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
                    
