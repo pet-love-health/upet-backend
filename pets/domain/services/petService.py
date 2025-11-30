@@ -17,7 +17,7 @@ from SmartCollar.Domain.ValueObject.location_type import LocationType
 class PetServices:
     @staticmethod
     def create_new_pet(petowner_id: int, pet: PetSchemaPost, db: Session ):
-        pet_owner = db.query(PetOwner).filter(PetOwner.id == petowner_id).first()
+        pet_owner = db.query(PetOwner).filter(PetOwner.userId == petowner_id).first()
         if not pet_owner:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="El propietario de la mascota no existe.")
 
@@ -25,7 +25,7 @@ class PetServices:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El peso debe ser mayor a 0.")
 
 
-        new_pet = Pet(petOwnerId=petowner_id,
+        new_pet = Pet(petOwnerId=pet_owner.id,
                       name=pet.name,
                       birthdate=pet.birthdate,
                       weight=pet.weight,
