@@ -41,7 +41,7 @@ class AppointmentService:
     def get_appointments_by_owner_id(owner_id: int, db: Session):
         pets = db.query(Pet).filter(Pet.petOwnerId == owner_id).all()
         if not pets:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="El dueño no tiene mascotas registradas.")
+            return []
         appointments_list = []
         for pet in pets:
             appointments = db.query(Appointment).filter(Appointment.pet_id == pet.id).all()
@@ -93,10 +93,10 @@ class AppointmentService:
     @staticmethod
     def get_appointments_by_entity(entity, entity_id, db: Session, status_enum):
 
-        if entity== "owner":      
+        if entity == "owner":
             pet = db.query(Pet).filter(Pet.petOwnerId == entity_id).first()
             if not pet:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="La mascota no existe.")
+                return []
             appointments = db.query(Appointment).filter(Appointment.status == status_enum).all()
             
         if entity == "veterinarian":
