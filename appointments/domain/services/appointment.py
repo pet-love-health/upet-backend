@@ -94,10 +94,14 @@ class AppointmentService:
     def get_appointments_by_entity(entity, entity_id, db: Session, status_enum):
 
         if entity == "owner":
-            pet = db.query(Pet).filter(Pet.petOwnerId == entity_id).first()
-            if not pet:
+            pets = db.query(Pet).filter(Pet.petOwnerId == entity_id).all()
+            if not pets:
                 return []
-            appointments = db.query(Appointment).filter(Appointment.status == status_enum).all()
+            pet_ids = [pet.id for pet in pets]
+            appointments = db.query(Appointment).filter(
+                Appointment.pet_id.in_(pet_ids),
+                Appointment.status == status_enum
+            ).all()
             
         if entity == "veterinarian":
             appointments = db.query(Appointment).filter(Appointment.veterinarian_id == entity_id).filter(Appointment.status == status_enum).all()
