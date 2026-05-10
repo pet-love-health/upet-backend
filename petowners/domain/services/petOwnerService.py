@@ -26,8 +26,8 @@ class PetOwnerService:
         if user.registered== True:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario ya ha sido registrado")
 
-        if len(petowner.numberPhone) != 10:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El número de teléfono debe tener 10 dígitos.")
+        if len(petowner.numberPhone) != 9:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El número de teléfono debe tener 9 dígitos.")
 
 
         new_petowner = PetOwner(userId=user_id,
