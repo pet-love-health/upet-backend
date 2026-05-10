@@ -12,7 +12,7 @@ class User(Base):
     password = Column(String(155))
     userType = Column(Enum(UserType, name='user_type'))
     registered = Column(Boolean, default=False)
-    image_url = Column(String(255), default="https://cdn.pixabay.m/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+    image_url = Column(String(255), default="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
     reset_code = Column(String(255), nullable=True)
     reset_code_expiry = Column(DateTime, nullable=True)
 

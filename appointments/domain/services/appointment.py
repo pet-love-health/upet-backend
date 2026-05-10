@@ -149,19 +149,27 @@ class AppointmentService:
         appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
         if not appointment:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="La cita no existe.")
-        
+
         appointment.diagnosis = result.diagnosis
         appointment.treatment = result.treatment
-        
         appointment.status = StatusAppointmentEnum.completed
         db.commit()
         db.refresh(appointment)
-        NotificationService.create_notification_for_cancelled_appointment(
-            db=db,
-            appointment=appointment,
-            pet_owner=db.query(PetOwner).filter(PetOwner.id == appointment.pet.petOwnerId).first(),
-            veterinarian=db.query(Veterinarian).filter(Veterinarian.id == appointment.veterinarian_id).first()
-        )
+
+        try:
+            pet = db.query(Pet).filter(Pet.id == appointment.pet_id).first()
+            pet_owner = db.query(PetOwner).filter(PetOwner.id == pet.petOwnerId).first() if pet else None
+            veterinarian = db.query(Veterinarian).filter(Veterinarian.id == appointment.veterinarian_id).first()
+            if pet_owner and veterinarian:
+                NotificationService.create_notification_for_appointment_completion(
+                    db=db,
+                    appointment=appointment,
+                    pet_owner=pet_owner,
+                    veterinarian=veterinarian
+                )
+        except Exception as e:
+            print(f"Error sending completion notification: {e}")
+
         return appointment
 
     @staticmethod
@@ -172,14 +180,22 @@ class AppointmentService:
 
         appointment.diagnosis = result.diagnosis
         appointment.treatment = result.treatment
-
         appointment.status = StatusAppointmentEnum.cancelled
         db.commit()
         db.refresh(appointment)
-        NotificationService.create_notification_for_appointment_completion(
-            db=db,
-            appointment=appointment,
-            pet_owner=db.query(PetOwner).filter(PetOwner.id == appointment.pet.petOwnerId).first(),
-            veterinarian=db.query(Veterinarian).filter(Veterinarian.id == appointment.veterinarian_id).first()
-        )
+
+        try:
+            pet = db.query(Pet).filter(Pet.id == appointment.pet_id).first()
+            pet_owner = db.query(PetOwner).filter(PetOwner.id == pet.petOwnerId).first() if pet else None
+            veterinarian = db.query(Veterinarian).filter(Veterinarian.id == appointment.veterinarian_id).first()
+            if pet_owner and veterinarian:
+                NotificationService.create_notification_for_appointment_cancellation(
+                    db=db,
+                    appointment=appointment,
+                    pet_owner=pet_owner,
+                    veterinarian=veterinarian
+                )
+        except Exception as e:
+            print(f"Error sending cancellation notification: {e}")
+
         return appointment
