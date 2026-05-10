@@ -1,18 +1,20 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 from enum import Enum
 from datetime import date
 from pets.domain.models.speciesEnum import SpecieEnum
 from pets.domain.models.genderEnum import GenderEnum
 from pets.domain.models.pet import Pet
 
+_DEFAULT_PET_IMAGE = "https://image.freepik.com/vector-gratis/ilustracion-vector-dibujos-animados-lindo-animal-mascota_24640-53565.jpg"
 
 class PetSchemaPost(BaseModel):
     name: str
     breed: str
     species: SpecieEnum
-    weight: float = Field(..., gt=0)  # Validar que weight sea mayor a 0
-    birthdate: date  
-    image_url: str
+    weight: float = Field(..., gt=0)
+    birthdate: date
+    image_url: Optional[str] = _DEFAULT_PET_IMAGE
     gender: GenderEnum
 
 class PetSchemaResponse(BaseModel):

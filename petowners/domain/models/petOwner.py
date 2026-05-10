@@ -8,7 +8,7 @@ class PetOwner(Base):
     __tablename__ = 'petowners'
     id = Column(Integer, primary_key=True, index=True)
     userId = Column(Integer, ForeignKey('users.id'))
-    numberPhone = Column(String(10))
+    numberPhone = Column(String(9))
     location = Column(String(150))
     subscriptionType = Column(Enum(SubscriptionType, name='subscription_type'), default=SubscriptionType.Basic)
 
